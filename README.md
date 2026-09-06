@@ -167,7 +167,9 @@ Application Container
         |
         v
 Google Cloud Run
-5. Application Flow
+
+
+## 5. Application Flow
 1. User opens the application
 2. User authenticates using Firebase
 3. Application establishes the authenticated user session
@@ -245,7 +247,7 @@ answer = response.text
 
 The production application should obtain credentials through the configured Google Cloud security mechanism rather than placing sensitive credentials directly in the source code.
 
-8. Firestore Data Model
+## Firestore Data Model
 
 A user-isolated Firestore structure can follow this pattern:
 

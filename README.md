@@ -8,7 +8,7 @@ The application allows authenticated users to discuss their cloud spending with 
 
 The application is designed around secure application development principles, including Firebase Authentication, user-isolated Cloud Firestore storage, Google Cloud Secret Manager, and Cloud Run deployment.
 
----
+
 
 ## 1. Project Overview
 
@@ -28,7 +28,7 @@ Users can provide information such as:
 
 Gemini analyzes the information and provides recommendations for reducing unnecessary cloud expenditure.
 
----
+
 
 ## 2. Core Features
 
@@ -143,7 +143,7 @@ Cloud Run provides the production hosting environment for the application.
 | Google Cloud Run | Application deployment |
 | Artifact Registry | Container image storage |
 
----
+
 
 ## 4. Application Architecture
 
@@ -183,7 +183,7 @@ Application Container
 Google Cloud Run
 ```
 
----
+
 
 ## 5. Application Flow
 
@@ -199,7 +199,7 @@ Google Cloud Run
 9. User can return to the personal FinOps journal
 ```
 
----
+
 
 ## 6. Example FinOps Analysis
 
@@ -258,7 +258,7 @@ Analyze Cloud Storage for unused or unnecessary data.
 
 Begin with Compute Engine because it represents the largest portion of the reported cloud expenditure.
 
----
+
 
 ## 7. Gemini Integration
 
@@ -281,7 +281,7 @@ answer = response.text
 
 The production application should obtain credentials through the configured Google Cloud security mechanism rather than placing sensitive credentials directly in the source code.
 
----
+
 
 ## 8. Firestore Data Model
 
@@ -316,7 +316,7 @@ Example document:
 
 The authenticated Firebase user ID is used to associate journal records with the correct user.
 
----
+
 
 ## 9. Firestore Security
 
@@ -342,7 +342,7 @@ service cloud.firestore {
 
 This ensures that an authenticated user can access only the journal records associated with their own Firebase UID.
 
----
+
 
 ## 10. Secret Management
 
@@ -376,7 +376,7 @@ api_key = response.payload.data.decode("UTF-8")
 
 The secret itself should never be committed to GitHub.
 
----
+
 
 ## 11. Firebase Authentication Example
 
@@ -402,7 +402,7 @@ The UID is then used to access:
 users/{user_id}/journal/
 ```
 
----
+
 
 ## 12. Streamlit Application Structure
 
@@ -437,7 +437,7 @@ if st.button("Analyze Cloud Costs"):
 
 The actual application can extend this structure with authentication, conversation history, Firestore persistence, and secure secret retrieval.
 
----
+
 
 ## 13. Docker Configuration
 
@@ -463,7 +463,7 @@ CMD ["streamlit", "run", "app.py", \
 
 The container can then be deployed to Google Cloud Run.
 
----
+
 
 ## 14. Requirements
 
@@ -479,7 +479,7 @@ firebase-admin
 
 The exact dependency versions should match the working application.
 
----
+
 
 ## 15. Project Structure
 
@@ -506,7 +506,7 @@ finops-gemini-journal/
 
 The final structure should reflect the actual files used by the deployed application.
 
----
+
 
 ## 16. Security Considerations
 
@@ -524,7 +524,7 @@ The application follows these principles:
 - The application runs on Google Cloud Run.
 - The AI assistant provides recommendations and does not automatically perform destructive cloud operations.
 
----
+
 
 ## 17. .gitignore
 
@@ -556,7 +556,7 @@ Never commit:
 - Cloud credentials
 - Environment secrets
 
----
+
 
 ## 18. Deployment
 
@@ -585,7 +585,7 @@ Public Application
 
 Cloud Run provides the production runtime for the application.
 
----
+
 
 ## 19. Original Innovation
 
@@ -620,7 +620,7 @@ What action should I take?
 
 This makes the journal actionable rather than simply storing conversations.
 
----
+
 
 ## 20. Example User Journey
 
@@ -652,7 +652,7 @@ Save Summary
 Personal FinOps Journal
 ```
 
----
+
 
 ## 21. Future Enhancements
 
@@ -670,7 +670,6 @@ Potential future enhancements include:
 - Resource utilization analysis
 - Automated recommendation prioritization
 
----
 
 ## 22. Project Goals
 
@@ -687,7 +686,7 @@ The main goals are:
 - Protect sensitive credentials.
 - Deploy the application using Cloud Run.
 
----
+
 
 ## 23. Technologies and Google Cloud Services
 
@@ -703,7 +702,7 @@ The project demonstrates the use of:
 - Python
 - Streamlit
 
----
+
 
 ## 24. Conclusion
 
@@ -712,6 +711,3 @@ FinOps Gemini Journal combines conversational AI, personal journaling, and cloud
 Instead of simply showing cloud costs, the application helps users understand where their spending may be inefficient and provides a prioritized plan for further investigation and optimization.
 
 The project demonstrates secure authentication, user-isolated data storage, AI-powered multi-turn interaction, secure credential management, and production deployment on Google Cloud Run.
-echo "=========================================="
-
-sed -n '1,40p' README.md

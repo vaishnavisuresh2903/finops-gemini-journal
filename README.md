@@ -127,7 +127,7 @@ The application is containerized and deployed to Google Cloud Run.
 
 Cloud Run provides the production hosting environment for the application.
 
----
+
 
 ## 3. Technology Stack
 

@@ -8,6 +8,8 @@ The application allows authenticated users to discuss their cloud spending with 
 
 The application is designed around secure application development principles, including Firebase Authentication, user-isolated Cloud Firestore storage, Google Cloud Secret Manager, and Cloud Run deployment.
 
+---
+
 ## 1. Project Overview
 
 Cloud environments can become expensive when resources are oversized, idle, underutilized, or no longer required.
@@ -26,11 +28,13 @@ Users can provide information such as:
 
 Gemini analyzes the information and provides recommendations for reducing unnecessary cloud expenditure.
 
+---
+
 ## 2. Core Features
 
 ### Firebase Authentication
 
-Users authenticate through Firebase Authentication before accessing the application.
+Users sign in using Firebase Authentication before accessing the application.
 
 Each authenticated user has an isolated application experience.
 
@@ -44,16 +48,22 @@ Users can ask follow-up questions without restarting the analysis.
 
 Example conversation:
 
-User: My cloud spending increased from ₹18,000 to ₹25,000 this month. What should I investigate?
+**User:**
 
-Gemini: The increase should first be investigated across compute, database, and storage services. Start by identifying resources with significant usage or cost changes.
+> My cloud spending increased from ₹18,000 to ₹25,000 this month. What should I investigate?
 
-User: Create a prioritized savings plan.
+**Gemini:**
 
-Gemini:
+> The increase should first be investigated across compute, database, and storage services. Start by identifying resources with significant usage or cost changes.
 
-> Priority 1: Review idle compute resources.
-> Priority 2: Analyze database sizing.
+**User:**
+
+> Create a prioritized savings plan.
+
+**Gemini:**
+
+> Priority 1: Review idle compute resources.  
+> Priority 2: Analyze database sizing.  
 > Priority 3: Review unused storage.
 
 ### Cloud Waste Auditor
@@ -117,6 +127,8 @@ The application is containerized and deployed to Google Cloud Run.
 
 Cloud Run provides the production hosting environment for the application.
 
+---
+
 ## 3. Technology Stack
 
 | Technology | Purpose |
@@ -129,7 +141,9 @@ Cloud Run provides the production hosting environment for the application.
 | Google Cloud Secret Manager | Secure secret management |
 | Docker | Application containerization |
 | Google Cloud Run | Application deployment |
+| Artifact Registry | Container image storage |
 
+---
 
 ## 4. Application Architecture
 
@@ -167,9 +181,13 @@ Application Container
         |
         v
 Google Cloud Run
+```
 
+---
 
 ## 5. Application Flow
+
+```text
 1. User opens the application
 2. User authenticates using Firebase
 3. Application establishes the authenticated user session
@@ -179,21 +197,28 @@ Google Cloud Run
 7. Smart Savings Planner creates prioritized recommendations
 8. Gemini conversation and summary are saved to Firestore
 9. User can return to the personal FinOps journal
-6. Example FinOps Analysis
+```
 
-Example input:
+---
 
+## 6. Example FinOps Analysis
+
+### Example Input
+
+```text
 Monthly cloud spending: ₹24,500
 
 Compute Engine: ₹12,000
 Cloud Storage: ₹5,000
 Cloud SQL: ₹5,500
 Other services: ₹2,000
+```
 
 The application sends the information to Gemini for analysis.
 
 A simplified prompt can be structured as:
 
+```python
 prompt = f"""
 You are a FinOps cloud cost optimization assistant.
 
@@ -211,29 +236,37 @@ Identify:
 Do not recommend destructive actions.
 Return practical and actionable recommendations.
 """
+```
 
 Gemini can then return structured recommendations such as:
 
-Cloud Waste Audit
+### Cloud Waste Audit
 
-High Priority:
+**High Priority**
+
 Review Compute Engine resources for idle or underutilized instances.
 
-Medium Priority:
+**Medium Priority**
+
 Review Cloud SQL sizing and utilization.
 
-Medium Priority:
+**Medium Priority**
+
 Analyze Cloud Storage for unused or unnecessary data.
 
-Recommended Next Step:
-Begin with Compute Engine because it represents the largest portion
-of the reported cloud expenditure.
-7. Gemini Integration
+**Recommended Next Step**
+
+Begin with Compute Engine because it represents the largest portion of the reported cloud expenditure.
+
+---
+
+## 7. Gemini Integration
 
 A simplified Gemini integration can be implemented using the Google Gen AI SDK.
 
 Example:
 
+```python
 from google import genai
 
 client = genai.Client()
@@ -244,13 +277,17 @@ response = client.models.generate_content(
 )
 
 answer = response.text
+```
 
 The production application should obtain credentials through the configured Google Cloud security mechanism rather than placing sensitive credentials directly in the source code.
 
-## Firestore Data Model
+---
+
+## 8. Firestore Data Model
 
 A user-isolated Firestore structure can follow this pattern:
 
+```text
 users/
     {user_id}/
         journal/
@@ -260,9 +297,11 @@ users/
                 conversation
                 created_at
                 recommendations
+```
 
 Example document:
 
+```json
 {
   "title": "September Cloud Cost Audit",
   "summary": "Compute resources represent the largest optimization opportunity.",
@@ -273,15 +312,19 @@ Example document:
   ],
   "created_at": "timestamp"
 }
+```
 
 The authenticated Firebase user ID is used to associate journal records with the correct user.
 
-9. Firestore Security
+---
+
+## 9. Firestore Security
 
 Firestore security rules should enforce user-level isolation.
 
 Example:
 
+```text
 rules_version = '2';
 
 service cloud.firestore {
@@ -295,21 +338,27 @@ service cloud.firestore {
     }
   }
 }
+```
 
 This ensures that an authenticated user can access only the journal records associated with their own Firebase UID.
 
-10. Secret Management
+---
+
+## 10. Secret Management
 
 Secrets must not be stored directly in source code.
 
 Avoid:
 
+```python
 API_KEY = "my-secret-api-key"
+```
 
 Instead, the application should retrieve sensitive credentials through Google Cloud Secret Manager or the appropriate runtime authentication mechanism.
 
 Example concept:
 
+```python
 from google.cloud import secretmanager
 
 client = secretmanager.SecretManagerServiceClient()
@@ -323,30 +372,43 @@ response = client.access_secret_version(
 )
 
 api_key = response.payload.data.decode("UTF-8")
+```
 
 The secret itself should never be committed to GitHub.
 
-11. Firebase Authentication Example
+---
+
+## 11. Firebase Authentication Example
 
 A simplified authentication flow can be represented as:
 
+```python
 def authenticate_user(email, password):
     # Firebase authentication logic
     # Validate credentials
     # Return authenticated user information
     pass
+```
 
 After successful authentication, the application should use the authenticated user's UID when accessing Firestore.
 
+```python
 user_id = authenticated_user.uid
+```
 
 The UID is then used to access:
 
+```text
 users/{user_id}/journal/
-12. Streamlit Application Structure
+```
+
+---
+
+## 12. Streamlit Application Structure
 
 A typical Streamlit application can be structured as:
 
+```python
 import streamlit as st
 
 st.set_page_config(
@@ -371,13 +433,17 @@ if st.button("Analyze Cloud Costs"):
         # Save summary to Firestore
 
         st.success("FinOps analysis generated.")
+```
 
 The actual application can extend this structure with authentication, conversation history, Firestore persistence, and secure secret retrieval.
 
-13. Docker Configuration
+---
+
+## 13. Docker Configuration
 
 Example Dockerfile:
 
+```dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -393,22 +459,31 @@ EXPOSE 8080
 CMD ["streamlit", "run", "app.py", \
      "--server.address=0.0.0.0", \
      "--server.port=8080"]
+```
 
 The container can then be deployed to Google Cloud Run.
 
-14. Requirements
+---
 
-Example requirements.txt:
+## 14. Requirements
 
+Example `requirements.txt`:
+
+```text
 streamlit
 google-genai
 google-cloud-firestore
 google-cloud-secret-manager
 firebase-admin
+```
 
 The exact dependency versions should match the working application.
 
-15. Project Structure
+---
+
+## 15. Project Structure
+
+```text
 finops-gemini-journal/
 │
 ├── app.py
@@ -427,30 +502,37 @@ finops-gemini-journal/
 │
 └── assets/
     └── screenshots/
+```
 
 The final structure should reflect the actual files used by the deployed application.
 
-16. Security Considerations
+---
+
+## 16. Security Considerations
 
 Security is a fundamental part of this project.
 
 The application follows these principles:
 
-Firebase Authentication is used for user identity.
-Firestore records are isolated by authenticated user ID.
-Firestore Security Rules enforce access boundaries.
-API credentials are not hardcoded.
-Google Cloud Secret Manager is used for sensitive credentials.
-Secrets are excluded from Git using .gitignore.
-The application does not expose credentials to the browser.
-The application runs on Google Cloud Run.
-The AI assistant provides recommendations and does not automatically perform destructive cloud operations.
-17. .gitignore
+- Firebase Authentication is used for user identity.
+- Firestore records are isolated by authenticated user ID.
+- Firestore Security Rules enforce access boundaries.
+- API credentials are not hardcoded.
+- Google Cloud Secret Manager is used for sensitive credentials.
+- Secrets are excluded from Git using `.gitignore`.
+- The application does not expose credentials to the browser.
+- The application runs on Google Cloud Run.
+- The AI assistant provides recommendations and does not automatically perform destructive cloud operations.
+
+---
+
+## 17. .gitignore
 
 Sensitive and temporary files should be excluded from source control.
 
 Example:
 
+```text
 .env
 .env.*
 *.key
@@ -463,21 +545,26 @@ __pycache__/
 venv/
 .streamlit/secrets.toml
 .DS_Store
+```
 
 Never commit:
 
-API keys
-Passwords
-Firebase private keys
-Service account JSON files
-Cloud credentials
-Environment secrets
-18. Deployment
+- API keys
+- Passwords
+- Firebase private keys
+- Service account JSON files
+- Cloud credentials
+- Environment secrets
+
+---
+
+## 18. Deployment
 
 The application is designed to run as a containerized Streamlit application on Google Cloud Run.
 
 High-level deployment flow:
 
+```text
 Source Code
     |
     v
@@ -494,27 +581,31 @@ Cloud Run
     |
     v
 Public Application
+```
 
 Cloud Run provides the production runtime for the application.
 
-19. Original Innovation
+---
+
+## 19. Original Innovation
 
 The base challenge provides the Personal Gemini Journal concept.
 
 This project extends that concept with two original FinOps capabilities.
 
-Cloud Waste Auditor
+### Cloud Waste Auditor
 
 The Cloud Waste Auditor uses Gemini to analyze cloud spending information and identify potential areas of waste.
 
 It converts raw cost information into understandable optimization insights.
 
-Smart Savings Planner
+### Smart Savings Planner
 
 The Smart Savings Planner converts the audit into a prioritized action plan.
 
 Instead of simply explaining cloud costs, the application answers:
 
+```text
 What is costing me money?
         |
         v
@@ -525,10 +616,15 @@ What should I investigate first?
         |
         v
 What action should I take?
+```
 
 This makes the journal actionable rather than simply storing conversations.
 
-20. Example User Journey
+---
+
+## 20. Example User Journey
+
+```text
 Login
   |
   v
@@ -554,65 +650,68 @@ Save Summary
   |
   v
 Personal FinOps Journal
-21. Future Enhancements
+```
+
+---
+
+## 21. Future Enhancements
 
 Potential future enhancements include:
 
-Direct Google Cloud Billing export integration
-Automated cost trend analysis
-Budget threshold alerts
-Historical spending dashboards
-Cost anomaly detection
-Service-level cost comparisons
-Monthly FinOps reports
-Estimated savings tracking
-CSV billing data upload
-Resource utilization analysis
-Automated recommendation prioritization
-22. Project Goals
+- Direct Google Cloud Billing export integration
+- Automated cost trend analysis
+- Budget threshold alerts
+- Historical spending dashboards
+- Cost anomaly detection
+- Service-level cost comparisons
+- Monthly FinOps reports
+- Estimated savings tracking
+- CSV billing data upload
+- Resource utilization analysis
+- Automated recommendation prioritization
+
+---
+
+## 22. Project Goals
 
 The project aims to demonstrate how generative AI and Google Cloud services can be combined to create a secure, personalized, and practical cloud operations application.
 
 The main goals are:
 
-Provide secure authenticated AI interactions.
-Maintain isolated personal FinOps data.
-Use Gemini for conversational cloud cost analysis.
-Identify potential cloud waste.
-Generate actionable savings plans.
-Persist useful AI-generated summaries.
-Protect sensitive credentials.
-Deploy the application using Cloud Run.
-23. Technologies and Google Cloud Services
+- Provide secure authenticated AI interactions.
+- Maintain isolated personal FinOps data.
+- Use Gemini for conversational cloud cost analysis.
+- Identify potential cloud waste.
+- Generate actionable savings plans.
+- Persist useful AI-generated summaries.
+- Protect sensitive credentials.
+- Deploy the application using Cloud Run.
+
+---
+
+## 23. Technologies and Google Cloud Services
 
 The project demonstrates the use of:
 
-Google Gemini
-Firebase Authentication
-Cloud Firestore
-Google Cloud Secret Manager
-Google Cloud Run
-Artifact Registry
-Docker
-Python
-Streamlit
-24. Conclusion
+- Google Gemini
+- Firebase Authentication
+- Cloud Firestore
+- Google Cloud Secret Manager
+- Google Cloud Run
+- Artifact Registry
+- Docker
+- Python
+- Streamlit
+
+---
+
+## 24. Conclusion
 
 FinOps Gemini Journal combines conversational AI, personal journaling, and cloud cost optimization into a single application.
 
 Instead of simply showing cloud costs, the application helps users understand where their spending may be inefficient and provides a prioritized plan for further investigation and optimization.
 
 The project demonstrates secure authentication, user-isolated data storage, AI-powered multi-turn interaction, secure credential management, and production deployment on Google Cloud Run.
+echo "=========================================="
 
-
-### One important correction
-
-The code sections above are **professional reference implementations**, but you should **not put code into GitHub that doesn't match your actual deployed application**.
-
-Since you said you need the **full code and full project content**, the next step should be to get your **actual current Cloud Shell project files** and put those into the repository. Otherwise, your README may claim Firebase/Firestore/Secret Manager functionality that your current app doesn't actually implement.
-
-If your current app is still the **Streamlit Cloud Run app we worked on**, send me a screenshot of your Cloud Shell showing:
-
-```bash
-pwd
-ls -la
+sed -n '1,40p' README.md

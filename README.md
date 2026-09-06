@@ -8,8 +8,6 @@ The application allows authenticated users to discuss their cloud spending with 
 
 The application is designed around secure application development principles, including Firebase Authentication, user-isolated Cloud Firestore storage, Google Cloud Secret Manager, and Cloud Run deployment.
 
----
-
 ## 1. Project Overview
 
 Cloud environments can become expensive when resources are oversized, idle, underutilized, or no longer required.
@@ -27,8 +25,6 @@ Users can provide information such as:
 - Resource utilization information
 
 Gemini analyzes the information and provides recommendations for reducing unnecessary cloud expenditure.
-
----
 
 ## 2. Core Features
 
@@ -48,17 +44,11 @@ Users can ask follow-up questions without restarting the analysis.
 
 Example conversation:
 
-User:
+User: My cloud spending increased from ₹18,000 to ₹25,000 this month. What should I investigate?
 
-> My cloud spending increased from ₹18,000 to ₹25,000 this month. What should I investigate?
+Gemini: The increase should first be investigated across compute, database, and storage services. Start by identifying resources with significant usage or cost changes.
 
-Gemini:
-
-> The increase should first be investigated across compute, database, and storage services. Start by identifying resources with significant usage or cost changes.
-
-User:
-
-> Create a prioritized savings plan.
+User: Create a prioritized savings plan.
 
 Gemini:
 
@@ -127,8 +117,6 @@ The application is containerized and deployed to Google Cloud Run.
 
 Cloud Run provides the production hosting environment for the application.
 
----
-
 ## 3. Technology Stack
 
 | Technology | Purpose |
@@ -142,7 +130,6 @@ Cloud Run provides the production hosting environment for the application.
 | Docker | Application containerization |
 | Google Cloud Run | Application deployment |
 
----
 
 ## 4. Application Architecture
 
